@@ -1,0 +1,17 @@
+.generalText{
+    text-align: center;
+    padding: 3%;
+    background-color: rgba(5, 29, 61, 0.796);
+    color: white
+}
+.generalContent{
+    padding: 3%;
+    background-color: rgba(25, 197, 77, 0.582);
+    color: rgba(5, 29, 61, 0.796);
+}
+.formInTheCentre{
+    display:block;
+    width:75%;
+    margin:0 auto;
+}
+
