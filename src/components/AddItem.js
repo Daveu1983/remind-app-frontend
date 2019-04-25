@@ -7,12 +7,12 @@ class AddItem extends Component {
         <form className="formInTheCentre">
             <div className="row">
                 <div className="col-12">    
-                    <label for="reminder" className="sr-only">remind me</label>
+                    <label htmlFor="reminder" className="sr-only">remind me</label>
                     <input id="reminder" className="form-control" type="text"name="reminder" 
                     placeholder="What do you want to be reminded of? "/>
                 </div>
                 <div className="col-12 col-offset">
-                    <label for="dateToRemind" className="sr-only">date</label>
+                    <label htmlFor="dateToRemind" className="sr-only">date</label>
                     <input id="dateToRemind" className="form-control" type="datetime-local"
                     name="whenToRemind"/>
                 </div>
