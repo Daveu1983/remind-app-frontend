@@ -5,7 +5,7 @@ class ExistingItems extends Component {
     return (
       <div className="container">
         <div className="row generalContent">
-            <div className="col-md-7 col-12 text-center">example</div>
+            <div className="col-md-7 col-12 text-center">{this.props.itemDescription}</div>
             <div className="col-md-3 col-12 text-center"><button className="btn btn-secondary" name="modify" 
                 type="submit">modify</button></div>
             <div className="col-md-2 col-12 text-center"><button className="btn btn-secondary" name="delete" 
