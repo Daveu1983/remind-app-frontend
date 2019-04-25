@@ -14,7 +14,7 @@ class SummaryOfItems extends Component {
     if (totalTasks > 0){    
         return (
             <div className="container">
-                <div class="row generalText">
+                <div className="row generalText">
                     <div className="col-12">
                         <p>You have {totalTasks} {wordTask}, {dueSoonTasks} due within the next 24hrs
                         and {overdueTasks} overdue</p>
