@@ -13,9 +13,10 @@ class App extends Component {
     items: []
   }  
 
-  addItem = (itemDescription) =>{
+  addItem = (item) =>{
     let currentItems = this.state.items;
-    currentItems.push(itemDescription);
+    const itemObject = {itemDescription: item, itemID: (currentItems.length + 1), itemDeleted: false}
+    currentItems.push(itemObject);
     this.setState({
       items: currentItems,
     })
@@ -29,8 +30,7 @@ class App extends Component {
         <SummaryOfItems itemCount = {this.state.items.length}/>
         {
           this.state.items.map(function(element, index){
-            // return <li >{element} {index} </li>    
-            return <ExistingItems itemNumber={index + 1} itemDescription={element} />      
+          return <ExistingItems key={index} itemNumber={element.itemID} itemDescription={element.itemDescription} />      
         })
         }
         <Footer />
