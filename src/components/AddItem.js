@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class AddItem extends Component {
 
-  state ={
+  state = {
     itemDescription: ""
   }
 
