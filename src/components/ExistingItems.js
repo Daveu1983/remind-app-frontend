@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 
 class ExistingItems extends Component {
+
+  deleteItemClicked = () => {
+    this.props.deleteItemFunction(this.props.itemNumber);
+  }
   render() {
     return (
       <div className="container">
@@ -10,7 +14,7 @@ class ExistingItems extends Component {
             <div className="col-md-2 col-12 text-center"><button className="btn btn-secondary"  
                 type="button">modify</button></div>
             <div className="col-md-2 col-12 text-center"><button className="btn btn-secondary" 
-                type="button">delete</button></div>
+                type="button"onClick={this.deleteItemClicked}>delete</button></div>
         </div>
       </div>
     );

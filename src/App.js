@@ -10,7 +10,7 @@ import SummaryOfItems from "./components/SummaryOfItems";
 
 class App extends Component {
   state = {
-    items: []
+    items: [],
   }  
 
   addItem = (item) =>{
@@ -18,7 +18,17 @@ class App extends Component {
     const itemObject = {itemDescription: item, itemID: (currentItems.length + 1), itemDeleted: false}
     currentItems.push(itemObject);
     this.setState({
-      items: currentItems,
+      items: currentItems
+    })
+  }
+
+  deleteItem = (itemToBeDeleted) =>{
+    let currentItems = this.state.items;
+    let filteredItems = currentItems.filter((element) => {
+      return (element.itemID !==itemToBeDeleted);
+    })
+    this.setState({
+      items: filteredItems
     })
   }
 
@@ -29,9 +39,10 @@ class App extends Component {
         <AddItem addItemFunction={this.addItem}/>
         <SummaryOfItems itemCount = {this.state.items.length}/>
         {
-          this.state.items.map(function(element, index){
-          return <ExistingItems key={index} itemNumber={element.itemID} itemDescription={element.itemDescription} />      
-        })
+          this.state.items.map((element, index)=>{
+            return <ExistingItems key={index} itemNumber={element.itemID} 
+            itemDescription={element.itemDescription} deleteItemFunction={this.deleteItem}/>      
+          })
         }
         <Footer />
       </div>
