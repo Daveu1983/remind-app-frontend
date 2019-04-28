@@ -11,24 +11,36 @@ import SummaryOfItems from "./components/SummaryOfItems";
 class App extends Component {
   state = {
     items: [],
+    liveItems:[]
   }  
 
   addItem = (item) =>{
     let currentItems = this.state.items;
     const itemObject = {itemDescription: item, itemID: (currentItems.length + 1), itemDeleted: false}
     currentItems.push(itemObject);
+    let filteredItems = currentItems.filter((element) => {
+      return (!(element.itemDeleted));
+    })
     this.setState({
-      items: currentItems
+      items: currentItems,
+      liveItems: filteredItems
     })
   }
 
   deleteItem = (itemToBeDeleted) =>{
     let currentItems = this.state.items;
+    currentItems.forEach((element, index) =>{
+      if(itemToBeDeleted === element.itemID){
+        const itemObject = {itemDescription: element.itemDescription, 
+          itemID: element.itemID, itemDeleted: true}
+          currentItems.splice(index,1,itemObject);
+      }
+    })
     let filteredItems = currentItems.filter((element) => {
-      return (element.itemID !==itemToBeDeleted);
+      return (!(element.itemDeleted));
     })
     this.setState({
-      items: filteredItems
+      liveItems: filteredItems
     })
   }
 
@@ -37,10 +49,10 @@ class App extends Component {
       <div className="App">
         <Header />
         <AddItem addItemFunction={this.addItem}/>
-        <SummaryOfItems itemCount = {this.state.items.length}/>
+        <SummaryOfItems itemCount = {this.state.liveItems.length}/>
         {
-          this.state.items.map((element, index)=>{
-            return <ExistingItems key={index} itemNumber={element.itemID} 
+          this.state.liveItems.map((element, index)=>{
+            return <ExistingItems key={index} itemID={element.itemID} 
             itemDescription={element.itemDescription} deleteItemFunction={this.deleteItem}/>      
           })
         }
