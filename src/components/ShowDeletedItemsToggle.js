@@ -13,7 +13,7 @@ class ShowDeletedItemsToggle extends Component {
             <div className="container">
                 <div className="col-md-2 col-12 text-center generalText">
                 <button className="btn btn-secondary" onClick={this.showDeletedClicked}
-                    type="button">{this.props.showDeletedText} </button></div>
+                    type="button">{this.props.showDeleted ? "Hide Deleted": "Show Deleted"} </button></div>
             </div>
         );
     }

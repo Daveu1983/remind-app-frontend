@@ -12,7 +12,6 @@ class App extends Component {
     items: [],
     liveItems:[],
     showDeleted: false,
-    showDeletedText:"show deleted",
     showItems: []
   }  
 
@@ -70,12 +69,6 @@ class App extends Component {
   showDeleted = () =>{
     let currentShowDeletedState = this.state.showDeleted
     currentShowDeletedState = !currentShowDeletedState
-    let deletedButtonText = this.state.showDeletedText
-    if (currentShowDeletedState){
-      deletedButtonText = "hide deleted"
-    }else{
-      deletedButtonText = "show deleted"
-    }
     this.setState({
       showDeleted: (currentShowDeletedState)
     })
@@ -91,10 +84,6 @@ class App extends Component {
       showItems: currentShowItems
     })
 
-
-    this.setState({
-      showDeletedText: deletedButtonText
-    })
   }
 
   render() { 
@@ -103,7 +92,7 @@ class App extends Component {
         <Header />
         <AddItem addItemFunction={this.addItem}/>
         <SummaryOfItems itemCount = {this.state.liveItems.length}/>
-        <ShowDeletedItemsToggle showDeletedFunction={this.showDeleted} showDeletedText={this.state.showDeletedText}/>        
+        <ShowDeletedItemsToggle showDeletedFunction={this.showDeleted} />        
         {
             this.state.showItems.map((element, index)=>{
               return <ExistingItems key={index} itemID={element.itemID} 
