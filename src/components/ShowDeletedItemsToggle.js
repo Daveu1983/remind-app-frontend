@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 
 class ShowDeletedItemsToggle extends Component {
-    state = {
-        showDeletedButtonClicked: true
-    }
 
     showDeletedClicked = () => {
         this.props.showDeletedFunction();
