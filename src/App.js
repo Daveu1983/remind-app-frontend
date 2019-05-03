@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import uuid from "uuid/v4";
 import './App.css';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -10,38 +11,20 @@ import ShowDeletedItemsToggle from "./components/ShowDeletedItemsToggle";
 class App extends Component {
   state = {
     items: [],
-    liveItems:[],
     showDeleted: false,
-    showItems: []
   }  
 
   addItem = (item) =>{
     let currentItems = this.state.items;
-    let currentShowDeletedState = this.state.showDeleted
-    let currentShowItems = this.state.showItems
-    const itemObject = {itemDescription: item, itemID: (currentItems.length + 1), itemDeleted: false}
+    const itemObject = {itemDescription: item, itemID: uuid(), itemDeleted: false}
     currentItems.push(itemObject);
-    let currentLiveItems = currentItems.filter((element) => {
-      return (!(element.itemDeleted));
-    })
     this.setState({
       items: currentItems,
-      liveItems: currentLiveItems
-    })
-    if(currentShowDeletedState){
-      currentShowItems = currentItems
-    }else{
-      currentShowItems = currentLiveItems
-    }
-    this.setState({
-      showItems: currentShowItems
     })
   }
 
   deleteItem = (itemToBeDeleted) =>{
     let currentItems = this.state.items;
-    let currentShowDeletedState = this.state.showDeleted
-    let currentShowItems = this.state.showItems
     currentItems.forEach((element, index) =>{
       if(itemToBeDeleted === element.itemID){
         const itemObject = {itemDescription: element.itemDescription, 
@@ -49,20 +32,8 @@ class App extends Component {
           currentItems.splice(index,1,itemObject);
       }
     })
-    let currentLiveItems = currentItems.filter((element) => {
-      return (!(element.itemDeleted));
-    })
     this.setState({
-      items: currentItems,
-      liveItems: currentLiveItems
-    })
-    if(currentShowDeletedState){
-      currentShowItems = currentItems
-    }else{
-      currentShowItems = currentLiveItems
-    }
-    this.setState({
-      showItems: currentShowItems
+      items: currentItems
     })
   }
 
@@ -70,20 +41,8 @@ class App extends Component {
     let currentShowDeletedState = this.state.showDeleted
     currentShowDeletedState = !currentShowDeletedState
     this.setState({
-      showDeleted: (currentShowDeletedState)
+      showDeleted: currentShowDeletedState
     })
-    let currentItems = this.state.items
-    let currentLiveItems = this.state.liveItems
-    let currentShowItems = this.state.showItems
-    if(currentShowDeletedState){
-      currentShowItems = currentItems
-    }else{
-      currentShowItems = currentLiveItems
-    }
-    this.setState({
-      showItems: currentShowItems
-    })
-
   }
 
   render() { 
@@ -91,11 +50,12 @@ class App extends Component {
       <div className="App">
         <Header />
         <AddItem addItemFunction={this.addItem}/>
-        <SummaryOfItems itemCount = {this.state.liveItems.length}/>
-        <ShowDeletedItemsToggle showDeletedFunction={this.showDeleted} />        
+        <SummaryOfItems itemCount = {this.state.items.length}/>
+        <ShowDeletedItemsToggle showDeleted={this.state.showDeleted} showDeletedFunction={this.showDeleted} />        
         {
-            this.state.showItems.map((element, index)=>{
-              return <ExistingItems key={index} itemID={element.itemID} 
+            this.state.items.map((element, index)=>{
+              return <ExistingItems key={index} itemID={element.itemID} showDeleted={this.state.showDeleted}
+              itemDeleted={element.itemDeleted}
               itemDescription={element.itemDescription} deleteItemFunction={this.deleteItem}/>
             })      
           }

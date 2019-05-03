@@ -7,7 +7,7 @@ class ExistingItems extends Component {
   }
   render() {
     return (
-      <div className="container">
+      <div className={`container ${!this.props.showDeleted && this.props.itemDeleted ? "hidden" : ""}`}>
         <div className="row generalContent">
             <div className="col-md-7 col-12 text-center">Task Description {this.props.itemDescription}</div>
             <div className="col-md-1 col-12 text-center">Task ID {this.props.itemID}</div>
