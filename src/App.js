@@ -12,6 +12,7 @@ class App extends Component {
   state = {
     items: [],
     showDeleted: false,
+    numberOfLiveItems: 0
   }  
 
   addItem = (item) =>{
@@ -21,6 +22,12 @@ class App extends Component {
     this.setState({
       items: currentItems,
     })
+    let filteredItems = this.state.items.filter((item)=>{
+      return (!item.itemDeleted)
+    })
+    this.setState({
+      numberOfLiveItems: filteredItems.length
+    }) 
   }
 
   deleteItem = (itemToBeDeleted) =>{
@@ -35,6 +42,12 @@ class App extends Component {
     this.setState({
       items: currentItems
     })
+    let filteredItems = this.state.items.filter((item)=>{
+      return (!item.itemDeleted)
+    })
+    this.setState({
+      numberOfLiveItems: filteredItems.length
+    }) 
   }
 
   showDeleted = () =>{
@@ -45,13 +58,24 @@ class App extends Component {
     })
   }
 
+  numberOfLiveItems = () =>{
+    let currentItems = this.state.items.filter((item)=>{
+      return (!item.itemDeleted)
+
+    })
+    this.setState({
+      numberOfLiveItems: currentItems.length
+    }) 
+  }
+
   render() { 
     return (
       <div className="App">
         <Header />
         <AddItem addItemFunction={this.addItem}/>
-        <SummaryOfItems itemCount = {this.state.items.length}/>
-        <ShowDeletedItemsToggle showDeleted={this.state.showDeleted} showDeletedFunction={this.showDeleted} />        
+        <SummaryOfItems itemCount={this.state.numberOfLiveItems}/>
+        <ShowDeletedItemsToggle showDeleted={this.state.showDeleted} 
+        showDeletedFunction={this.showDeleted} />        
         {
             this.state.items.map((element, index)=>{
               return <ExistingItems key={index} itemID={element.itemID} showDeleted={this.state.showDeleted}
