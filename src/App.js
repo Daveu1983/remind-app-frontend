@@ -6,61 +6,85 @@ import Footer from "./components/Footer";
 import AddItem from "./components/AddItem";
 import ExistingItems from "./components/ExistingItems";
 import SummaryOfItems from "./components/SummaryOfItems";
-import ShowDeletedItemsToggle from "./components/ShowDeletedItemsToggle";
+import ShowCompletedItemsToggle from "./components/ShowCompletedItemsToggle";
 
 class App extends Component {
   state = {
     items: [],
-    showDeleted: false,
+    showCompleted: false,
     numberOfLiveItems: 0
   }  
 
   addItem = (item) =>{
     let currentItems = this.state.items;
-    const itemObject = {itemDescription: item, itemID: uuid(), itemDeleted: false}
+    const itemObject = {itemDescription: item, itemID: uuid(), itemCompleted:false}
     currentItems.push(itemObject);
     this.setState({
       items: currentItems,
     })
     let filteredItems = this.state.items.filter((item)=>{
-      return (!item.itemDeleted)
+      return (!item.itemCompleted)
     })
     this.setState({
       numberOfLiveItems: filteredItems.length
     }) 
   }
+  completeItem = (itemToBeCompleted) =>{
+    let currentItems = this.state.items;
+    currentItems.forEach((element, index) =>{
+      if(itemToBeCompleted === element.itemID){
+        const itemObject = {itemDescription: element.itemDescription, 
+          itemID: element.itemID, itemCompleted: true}
+          currentItems.splice(index,1,itemObject);
+      }
+    })
+    this.getLiveItems();
+    // let filteredItems = this.state.items.filter((item)=>{
+    //   return (!item.itemCompleted)
+    // })
+    // this.setState({
+    //   numberOfLiveItems: filteredItems.length
+    // }) 
+  }
+  getLiveItems = () => {
+  let filteredItems = this.state.items.filter((item)=>{
+    return (!item.itemCompleted)
+  })
+  this.setState({
+    numberOfLiveItems: filteredItems.length
+  }) 
+}
 
   deleteItem = (itemToBeDeleted) =>{
     let currentItems = this.state.items;
     currentItems.forEach((element, index) =>{
       if(itemToBeDeleted === element.itemID){
-        const itemObject = {itemDescription: element.itemDescription, 
-          itemID: element.itemID, itemDeleted: true}
-          currentItems.splice(index,1,itemObject);
+          currentItems.splice(index,1,);
       }
     })
     this.setState({
       items: currentItems
     })
-    let filteredItems = this.state.items.filter((item)=>{
-      return (!item.itemDeleted)
-    })
-    this.setState({
-      numberOfLiveItems: filteredItems.length
-    }) 
+    this.getLiveItems();
+    // let filteredItems = this.state.items.filter((item)=>{
+    //   return (!item.itemCompleted)
+    // })
+    // this.setState({
+    //   numberOfLiveItems: filteredItems.length
+    // })
   }
 
-  showDeleted = () =>{
-    let currentShowDeletedState = this.state.showDeleted
-    currentShowDeletedState = !currentShowDeletedState
+  showCompleted = () =>{
+    let currentShowCompletedState = this.state.showCompleted
+    currentShowCompletedState = !currentShowCompletedState
     this.setState({
-      showDeleted: currentShowDeletedState
+      showCompleted: currentShowCompletedState
     })
   }
 
   numberOfLiveItems = () =>{
     let currentItems = this.state.items.filter((item)=>{
-      return (!item.itemDeleted)
+      return (!item.Completed)
 
     })
     this.setState({
@@ -74,13 +98,14 @@ class App extends Component {
         <Header />
         <AddItem addItemFunction={this.addItem}/>
         <SummaryOfItems itemCount={this.state.numberOfLiveItems}/>
-        <ShowDeletedItemsToggle showDeleted={this.state.showDeleted} 
-        showDeletedFunction={this.showDeleted} />        
+        <ShowCompletedItemsToggle showCompleted={this.state.showCompleted} 
+        showCompletedFunction={this.showCompleted} />  
         {
             this.state.items.map((element, index)=>{
-              return <ExistingItems key={index} itemID={element.itemID} showDeleted={this.state.showDeleted}
-              itemDeleted={element.itemDeleted}
-              itemDescription={element.itemDescription} deleteItemFunction={this.deleteItem}/>
+              return <ExistingItems key={index} itemID={element.itemID} 
+              showCompleted={this.state.showCompleted} 
+              itemCompleted={element.itemCompleted} itemDescription={element.itemDescription} 
+              completeItemFunction={this.completeItem} deleteItemFunction={this.deleteItem}/>
             })      
           }
         <Footer />
