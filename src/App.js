@@ -22,12 +22,7 @@ class App extends Component {
     this.setState({
       items: currentItems,
     })
-    let filteredItems = this.state.items.filter((item)=>{
-      return (!item.itemCompleted)
-    })
-    this.setState({
-      numberOfLiveItems: filteredItems.length
-    }) 
+    this.getLiveItems();
   }
   completeItem = (itemToBeCompleted) =>{
     let currentItems = this.state.items;
@@ -39,12 +34,6 @@ class App extends Component {
       }
     })
     this.getLiveItems();
-    // let filteredItems = this.state.items.filter((item)=>{
-    //   return (!item.itemCompleted)
-    // })
-    // this.setState({
-    //   numberOfLiveItems: filteredItems.length
-    // }) 
   }
   getLiveItems = () => {
   let filteredItems = this.state.items.filter((item)=>{
@@ -66,12 +55,7 @@ class App extends Component {
       items: currentItems
     })
     this.getLiveItems();
-    // let filteredItems = this.state.items.filter((item)=>{
-    //   return (!item.itemCompleted)
-    // })
-    // this.setState({
-    //   numberOfLiveItems: filteredItems.length
-    // })
+
   }
 
   showCompleted = () =>{
