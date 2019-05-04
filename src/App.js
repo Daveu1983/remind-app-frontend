@@ -81,9 +81,18 @@ class App extends Component {
       <div className="App">
         <Header />
         <AddItem addItemFunction={this.addItem}/>
-        <SummaryOfItems itemCount={this.state.numberOfLiveItems}/>
-        <ShowCompletedItemsToggle showCompleted={this.state.showCompleted} 
-        showCompletedFunction={this.showCompleted} />  
+        <div className="container" >
+          <div className="row generalText">
+            <div className="col-8">
+              <SummaryOfItems itemCount={this.state.numberOfLiveItems}/>
+            </div>
+            <div className="col-4">
+              <ShowCompletedItemsToggle showCompleted={this.state.showCompleted} 
+              showCompletedFunction={this.showCompleted} />
+            </div>
+          </div>
+        </div>
+
         {
             this.state.items.map((element, index)=>{
               return <ExistingItems key={index} itemID={element.itemID} 
