@@ -63,7 +63,11 @@ class App extends Component {
     let currentItems = this.state.items;
     currentItems.map((element)=>{
       if(itemToBeModified === element.itemID){
-        element.inEditing = true;
+        if(element.itemCompleted){
+          alert("cannot edit completed item")
+        }else{
+          element.inEditing = true;
+        }
       }
       return element;
     })
