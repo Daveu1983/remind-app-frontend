@@ -3,7 +3,7 @@ import React, { Component } from "react";
 class AddItem extends Component {
 
   state = {
-    item:{itemDescription: "", itemID:"", itemCompleted: false}
+    item:{itemDescription: "", itemID:"", itemCompleted: false, inEditing: false}
   }
 
   addItemClicked = () => {

@@ -7,6 +7,7 @@ import AddItem from "./components/AddItem";
 import ExistingItems from "./components/ExistingItems";
 import SummaryOfItems from "./components/SummaryOfItems";
 import ShowCompletedItemsToggle from "./components/ShowCompletedItemsToggle";
+import EditItem from "./components/EditItem";
 
 class App extends Component {
   state = {
@@ -17,7 +18,7 @@ class App extends Component {
 
   addItem = (item) =>{
     let currentItems = this.state.items;
-    const itemObject = {itemDescription: item, itemID: uuid(), itemCompleted:false}
+    const itemObject = {itemDescription: item, itemID: uuid(), itemCompleted:false, inEditing:false}
     currentItems.push(itemObject);
     this.setState({
       items: currentItems,
@@ -29,7 +30,7 @@ class App extends Component {
     currentItems.forEach((element, index) =>{
       if(itemToBeCompleted === element.itemID){
         const itemObject = {itemDescription: element.itemDescription, 
-          itemID: element.itemID, itemCompleted: true}
+          itemID: element.itemID, itemCompleted: true, inEditing:element.inEditing}
           currentItems.splice(index,1,itemObject);
       }
     })
@@ -58,6 +59,19 @@ class App extends Component {
 
   }
 
+  modifyItem = (itemToBeModified) => {
+    let currentItems = this.state.items;
+    currentItems.map((element)=>{
+      if(itemToBeModified === element.itemID){
+        element.inEditing = true;
+      }
+      return element;
+    })
+    this.setState({
+      items: currentItems
+    })
+  }
+
   showCompleted = () =>{
     let currentShowCompletedState = this.state.showCompleted
     currentShowCompletedState = !currentShowCompletedState
@@ -74,6 +88,32 @@ class App extends Component {
     this.setState({
       numberOfLiveItems: currentItems.length
     }) 
+  }
+
+  saveChanges = (Id,newDescription) =>{
+    let currentItems = this.state.items;
+    currentItems.map((element)=>{
+      if(Id === element.itemID){
+        element.inEditing = false;
+        element.itemDescription = newDescription;
+      }
+      return element;
+    })
+    this.setState({
+      items: currentItems
+    })
+  }
+  discardChanges = (Id) =>{
+    let currentItems = this.state.items;
+    currentItems.map((element)=>{
+      if(Id === element.itemID){
+        element.inEditing = false;
+      }
+      return element;
+    })
+    this.setState({
+      items: currentItems
+    })
   }
 
   render() { 
@@ -95,10 +135,17 @@ class App extends Component {
 
         {
             this.state.items.map((element, index)=>{
-              return <ExistingItems key={index} itemID={element.itemID} 
-              showCompleted={this.state.showCompleted} 
-              itemCompleted={element.itemCompleted} itemDescription={element.itemDescription} 
-              completeItemFunction={this.completeItem} deleteItemFunction={this.deleteItem}/>
+              if(element.inEditing){
+                return <EditItem key={index} itemID={element.itemID} 
+                itemDescription={element.itemDescription}
+                saveChangesFunction={this.saveChanges} discardChangesFunction={this.discardChanges}/>
+              }else{
+                return <ExistingItems key={index} itemID={element.itemID} 
+                showCompleted={this.state.showCompleted} 
+                itemCompleted={element.itemCompleted} itemDescription={element.itemDescription} 
+                completeItemFunction={this.completeItem} deleteItemFunction={this.deleteItem}
+                modifyItemFunction={this.modifyItem}/>
+              }
             })      
           }
         <Footer />
