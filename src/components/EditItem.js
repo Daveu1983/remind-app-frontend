@@ -28,12 +28,12 @@ class EditItem extends Component {
                     <input onChange={this.inputBoxChanged} className="form-control" type="text"
                     defaultValue={this.props.itemDescription}/>
                 </div>
-                <div className="col-12 text-center">
+                <div className="col-6 text-center">
                     <button className="btn btn-secondary" type="button" onClick={this.saveChangeClicked}>
                     Save changes
                     </button>
                 </div>
-                <div className="col-12 text-center">
+                <div className="col-6 text-center">
                     <button className="btn btn-secondary" type="button" 
                     onClick={this.discardChangeClicked}>
                     discard changes

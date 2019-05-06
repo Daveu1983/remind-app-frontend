@@ -17,7 +17,7 @@ class App extends Component {
   }  
 
   addItem = (item) =>{
-    let currentItems = this.state.items;
+    const currentItems = this.state.items;
     const itemObject = {itemDescription: item, itemID: uuid(), itemCompleted:false, inEditing:false}
     currentItems.push(itemObject);
     this.setState({
@@ -26,7 +26,7 @@ class App extends Component {
     this.getLiveItems();
   }
   completeItem = (itemToBeCompleted) =>{
-    let currentItems = this.state.items;
+    const currentItems = this.state.items;
     currentItems.forEach((element, index) =>{
       if(itemToBeCompleted === element.itemID){
         const itemObject = {itemDescription: element.itemDescription, 
@@ -37,7 +37,7 @@ class App extends Component {
     this.getLiveItems();
   }
   getLiveItems = () => {
-  let filteredItems = this.state.items.filter((item)=>{
+  const filteredItems = this.state.items.filter((item)=>{
     return (!item.itemCompleted)
   })
   this.setState({
@@ -46,7 +46,7 @@ class App extends Component {
 }
 
   deleteItem = (itemToBeDeleted) =>{
-    let currentItems = this.state.items;
+    const currentItems = this.state.items;
     currentItems.forEach((element, index) =>{
       if(itemToBeDeleted === element.itemID){
           currentItems.splice(index,1,);
@@ -60,7 +60,7 @@ class App extends Component {
   }
 
   modifyItem = (itemToBeModified) => {
-    let currentItems = this.state.items;
+    const currentItems = this.state.items;
     currentItems.map((element)=>{
       if(itemToBeModified === element.itemID){
         if(element.itemCompleted){
@@ -85,7 +85,7 @@ class App extends Component {
   }
 
   numberOfLiveItems = () =>{
-    let currentItems = this.state.items.filter((item)=>{
+    const currentItems = this.state.items.filter((item)=>{
       return (!item.Completed)
 
     })
@@ -95,7 +95,7 @@ class App extends Component {
   }
 
   saveChanges = (Id,newDescription) =>{
-    let currentItems = this.state.items;
+    const currentItems = this.state.items;
     currentItems.map((element)=>{
       if(Id === element.itemID){
         element.inEditing = false;
@@ -108,7 +108,7 @@ class App extends Component {
     })
   }
   discardChanges = (Id) =>{
-    let currentItems = this.state.items;
+    const currentItems = this.state.items;
     currentItems.map((element)=>{
       if(Id === element.itemID){
         element.inEditing = false;
