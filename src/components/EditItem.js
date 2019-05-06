@@ -26,7 +26,7 @@ class EditItem extends Component {
             <div className="row">
                 <div className="col-12">    
                     <input onChange={this.inputBoxChanged} className="form-control" type="text"
-                    placeholder={this.props.itemDescription}/>
+                    defaultValue={this.props.itemDescription}/>
                 </div>
                 <div className="col-12 text-center">
                     <button className="btn btn-secondary" type="button" onClick={this.saveChangeClicked}>
