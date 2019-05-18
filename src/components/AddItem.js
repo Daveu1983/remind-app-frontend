@@ -3,11 +3,12 @@ import React, { Component } from "react";
 class AddItem extends Component {
 
   state = {
-    item:{itemDescription: "", itemID:"", itemCompleted: false, inEditing: false}
+    item:{itemDescription: "", itemID:"", itemCompleted: false, inEditing: false},
   }
 
   addItemClicked = () => {
     this.props.addItemFunction(this.state.itemDescription);
+
   } 
 
   inputBoxChanged = (event) =>{
@@ -24,7 +25,7 @@ class AddItem extends Component {
                     placeholder="What do you want to be reminded of? "/>
                 </div>
                 <div className="col-12 text-center">
-                    <button className="btn btn-secondary" type="button" onClick={this.addItemClicked}>
+                    <button type="reset" className="btn btn-secondary"  onClick={this.addItemClicked}>
                     Remind me!
                     </button>
                 </div>
