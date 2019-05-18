@@ -1,3 +1,11 @@
+This is an app to be used to remind users of tasks they need to complete.
+Functionality includes:-
+- Creating tasks
+- Editing task descriptions
+- Completing tasks
+- Permanently deleting tasks
+- Toggle view to show or hide tasks
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
