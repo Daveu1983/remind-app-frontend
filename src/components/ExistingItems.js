@@ -18,7 +18,8 @@ class ExistingItems extends Component {
     return (
       <div className={`container ${!this.props.showCompleted && this.props.itemCompleted ? "hidden" : ""}`}>
         <div className="row generalContent">
-            <div className="col-md-6 col-12 text-center">{this.props.itemDescription}</div>
+            <div className="col-md-6 col-12 text-center">{this.props.itemCompleted ? <b>COMPLETED: </b>:""}
+            {this.props.itemDescription}</div>
             <div className="col-md-2 col-12 text-center"><button className="btn btn-secondary"  
                 type="button"onClick={this.modifyItemClicked}>modify</button></div>
             <div className="col-md-2 col-12 text-center"><button className="btn btn-secondary" 

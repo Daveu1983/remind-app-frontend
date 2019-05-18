@@ -19,7 +19,7 @@ class AddItem extends Component {
       <div className="container generalContent">
         <form className="formInTheCentre">
             <div className="row">
-                <div className="col-12">    
+                <div className="col-12">  
                     <input onChange={this.inputBoxChanged} className="form-control" type="text"
                     placeholder="What do you want to be reminded of? "/>
                 </div>
