@@ -1,9 +1,25 @@
 import React, { Component } from "react";
+import axios from 'axios';
 
 class AddItem extends Component {
 
   state = {
     item:{itemDescription: "", itemID:"", completed: false, inEditing: false, UserId:""},
+    users:[]
+  }
+  componentWillMount(){
+    this.getUsers()
+  }
+
+  getUsers(){
+    axios.get('https://j34ofykf70.execute-api.eu-west-2.amazonaws.com/dev/users')
+    // need to refactor back-end app so that users brings back users and not tasks
+    .then(response =>{
+      this.setState({users:response.data.tasks})
+    })
+  .catch(function (error) {
+  console.log(error);
+    })
   }
 
   addItemClicked = () => {
@@ -31,9 +47,12 @@ class AddItem extends Component {
                 <div className="col-2">
                     <select onChange={this.saveUser}>
                       <option value="0">Select a user below</option>
-                      <option value="1">Susan</option>
-                      <option value="2">Geoff</option>
-                      <option value="3">Dave</option>
+                     { 
+                        this.state.users.map((element, index)=>{
+
+                          return <option key={index} value={element.UserId}>{element.username} </option>
+                        })
+                    }
                     </select >
                   </div>
                 <div className="col-12 text-center">

@@ -13,11 +13,11 @@ class App extends Component {
   state = {
     items: [],
     showCompleted: false,
-    numberOfLiveItems: 0
+    numberOfLiveItems: 0,
   }  
 
   componentWillMount(){
-    this.getItems()
+    this.getItems();
   }
 
   getItems(){
