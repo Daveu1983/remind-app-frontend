@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import uuid from "uuid/v4";
 import './App.css';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -18,34 +17,36 @@ class App extends Component {
   }  
 
   componentWillMount(){
-    axios.get('https://j34ofykf70.execute-api.eu-west-2.amazonaws.com/dev/tasks')
-   .then(response => {
-    this.setState({items:response.data.tasks})
-    })
-    .catch(function (error) {
-    console.log(error);
-    })
+    this.getItems()
   }
 
-  addItem = (item) =>{
+  getItems(){
+    axios.get('https://j34ofykf70.execute-api.eu-west-2.amazonaws.com/dev/tasks')
+    .then(response => {
+     this.setState({items:response.data.tasks})
+     })
+     .catch(function (error) {
+     console.log(error);
+     })
+  }
+
+  addItem = (item, UserId) =>{
+    if ((UserId === undefined) || (UserId === "0")){
+      alert("select  user");
+    } else{
     axios.post('https://j34ofykf70.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
       itemDescription:item,
       completed:false,
-      UserId:3
+      UserId:parseInt(UserId)
     })
-    .then(function (response) {
-      console.log(response);
+    .then(response => {
+      this.getItems();
     })
     .catch(function (error) {
       console.log(error);
     });
-    const currentItems = this.state.items;
-    const itemObject = {itemDescription: item, itemID: uuid(), completed:false, inEditing:false}
-    currentItems.push(itemObject);
-    this.setState({
-      items: currentItems,
-    })
     this.getLiveItems();
+    }
   }
   completeItem = (itemToBeCompleted) =>{
     const currentItems = this.state.items;
