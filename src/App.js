@@ -28,6 +28,17 @@ class App extends Component {
   }
 
   addItem = (item) =>{
+    axios.post('https://j34ofykf70.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
+      itemDescription:item,
+      completed:false,
+      UserId:3
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
     const currentItems = this.state.items;
     const itemObject = {itemDescription: item, itemID: uuid(), completed:false, inEditing:false}
     currentItems.push(itemObject);
