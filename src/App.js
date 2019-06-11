@@ -8,6 +8,7 @@ import ExistingItems from "./components/ExistingItems";
 import SummaryOfItems from "./components/SummaryOfItems";
 import ShowCompletedItemsToggle from "./components/ShowCompletedItemsToggle";
 import EditItem from "./components/EditItem";
+import axios from "axios";
 
 class App extends Component {
   state = {
@@ -16,9 +17,19 @@ class App extends Component {
     numberOfLiveItems: 0
   }  
 
+  componentWillMount(){
+    axios.get('https://j34ofykf70.execute-api.eu-west-2.amazonaws.com/dev/tasks')
+   .then(response => {
+    this.setState({items:response.data.tasks})
+    })
+    .catch(function (error) {
+    console.log(error);
+    })
+  }
+
   addItem = (item) =>{
     const currentItems = this.state.items;
-    const itemObject = {itemDescription: item, itemID: uuid(), itemCompleted:false, inEditing:false}
+    const itemObject = {itemDescription: item, itemID: uuid(), completed:false, inEditing:false}
     currentItems.push(itemObject);
     this.setState({
       items: currentItems,
@@ -30,7 +41,7 @@ class App extends Component {
     currentItems.forEach((element, index) =>{
       if(itemToBeCompleted === element.itemID){
         const itemObject = {itemDescription: element.itemDescription, 
-          itemID: element.itemID, itemCompleted: true, inEditing:element.inEditing}
+          itemID: element.itemID, completed: true, inEditing:element.inEditing}
           currentItems.splice(index,1,itemObject);
       }
     })
@@ -38,7 +49,7 @@ class App extends Component {
   }
   getLiveItems = () => {
   const filteredItems = this.state.items.filter((item)=>{
-    return (!item.itemCompleted)
+    return (!item.completed)
   })
   this.setState({
     numberOfLiveItems: filteredItems.length
@@ -63,7 +74,7 @@ class App extends Component {
     const currentItems = this.state.items;
     currentItems.map((element)=>{
       if(itemToBeModified === element.itemID){
-        if(element.itemCompleted){
+        if(element.completed){
           alert("cannot edit completed item")
         }else{
           element.inEditing = true;
@@ -86,7 +97,7 @@ class App extends Component {
 
   numberOfLiveItems = () =>{
     const currentItems = this.state.items.filter((item)=>{
-      return (!item.Completed)
+      return (!item.completed)
 
     })
     this.setState({
@@ -146,7 +157,7 @@ class App extends Component {
               }else{
                 return <ExistingItems key={index} itemID={element.itemID} 
                 showCompleted={this.state.showCompleted} 
-                itemCompleted={element.itemCompleted} itemDescription={element.itemDescription} 
+                itemCompleted={element.completed} itemDescription={element.itemDescription} 
                 completeItemFunction={this.completeItem} deleteItemFunction={this.deleteItem}
                 modifyItemFunction={this.modifyItem}/>
               }

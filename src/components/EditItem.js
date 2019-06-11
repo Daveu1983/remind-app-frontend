@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class EditItem extends Component {
     state = {
-        item:{itemDescription: "", itemID:"", itemCompleted: false, inEditing: false}
+        item:{itemDescription: "", itemID:"", completed: false, inEditing: false}
       }
 
     saveChangeClicked = () => {
