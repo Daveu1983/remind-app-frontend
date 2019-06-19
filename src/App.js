@@ -39,7 +39,7 @@ class App extends Component {
       completed:false,
       UserId:parseInt(UserId)
     })
-    .then(response => {
+    .then(() => {
       this.getItems();
     })
     .catch(function (error) {
@@ -69,18 +69,21 @@ class App extends Component {
 }
 
   deleteItem = (itemToBeDeleted) =>{
-    const currentItems = this.state.items;
-    currentItems.forEach((element, index) =>{
-      if(itemToBeDeleted === element.itemID){
-          currentItems.splice(index,1,);
-      }
+    console.log(this.state.items)
+    console.log(itemToBeDeleted)
+    axios.delete('https://j34ofykf70.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
+      itemID:itemToBeDeleted,
     })
-    this.setState({
-      items: currentItems
+    .then(() => {
+      alert("dddddd")
+      this.getItems();
     })
+    .catch(function (error) {
+      console.log(error);
+    });
     this.getLiveItems();
-
   }
+  
 
   modifyItem = (itemToBeModified) => {
     const currentItems = this.state.items;
