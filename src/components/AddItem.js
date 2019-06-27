@@ -4,7 +4,7 @@ import axios from 'axios';
 class AddItem extends Component {
 
   state = {
-    item:{itemDescription: "", itemID:"", completed: false, inEditing: false, UserId:""},
+    item:{itemDescription: "", itemID:"", completed: false, inEditing: false, userId:""},
     users:[]
   }
   componentWillMount(){
@@ -12,7 +12,7 @@ class AddItem extends Component {
   }
 
   getUsers(){
-    axios.get('https://j34ofykf70.execute-api.eu-west-2.amazonaws.com/dev/users')
+    axios.get('https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/users')
     // need to refactor back-end app so that users brings back users and not tasks
     .then(response =>{
       this.setState({users:response.data.tasks})
@@ -50,7 +50,7 @@ class AddItem extends Component {
                      { 
                         this.state.users.map((element, index)=>{
 
-                          return <option key={index} value={element.UserId}>{element.username} </option>
+                          return <option key={index} value={element.userId}>{element.username} </option>
                         })
                     }
                     </select >

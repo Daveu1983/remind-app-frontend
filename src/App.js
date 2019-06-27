@@ -21,7 +21,7 @@ class App extends Component {
   }
 
   getItems(){
-    axios.get('https://j34ofykf70.execute-api.eu-west-2.amazonaws.com/dev/tasks')
+    axios.get('https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/tasks')
     .then(response => {
      this.setState({items:response.data.tasks})
      })
@@ -30,14 +30,14 @@ class App extends Component {
      })
   }
 
-  addItem = (item, UserId) =>{
-    if ((UserId === undefined) || (UserId === "0")){
+  addItem = (item, userId) =>{
+    if ((userId === undefined) || (userId === "0")){
       alert("select  user");
     } else{
-    axios.post('https://j34ofykf70.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
+    axios.post('https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
       itemDescription:item,
       completed:false,
-      UserId:parseInt(UserId)
+      userId:parseInt(userId)
     })
     .then(() => {
       this.getItems();
@@ -71,7 +71,7 @@ class App extends Component {
   deleteItem = (itemToBeDeleted) =>{
     console.log(this.state.items)
     console.log(itemToBeDeleted)
-    axios.delete('https://j34ofykf70.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
+    axios.delete('https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
       itemID:itemToBeDeleted,
     })
     .then(() => {
