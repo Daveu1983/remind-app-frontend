@@ -69,13 +69,8 @@ class App extends Component {
 }
 
   deleteItem = (itemToBeDeleted) =>{
-    console.log(this.state.items)
-    console.log(itemToBeDeleted)
-    axios.delete('https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
-      itemID:itemToBeDeleted,
-    })
+    axios.delete(`https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/tasks/${itemToBeDeleted}`)
     .then(() => {
-      alert("dddddd")
       this.getItems();
     })
     .catch(function (error) {
