@@ -49,16 +49,19 @@ class App extends Component {
     }
   }
   completeItem = (itemToBeCompleted) =>{
-    const currentItems = this.state.items;
-    currentItems.forEach((element, index) =>{
-      if(itemToBeCompleted === element.itemID){
-        const itemObject = {itemDescription: element.itemDescription, 
-          itemID: element.itemID, completed: true, inEditing:element.inEditing}
-          currentItems.splice(index,1,itemObject);
-      }
+    axios.put('https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
+      itemID: itemToBeCompleted,
     })
+    .then(() => {
+      this.getItems();
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
     this.getLiveItems();
   }
+  
+
   getLiveItems = () => {
   const filteredItems = this.state.items.filter((item)=>{
     return (!item.completed)
