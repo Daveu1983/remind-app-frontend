@@ -2,11 +2,11 @@ import React, { Component } from "react";
 
 class EditItem extends Component {
     state = {
-        item:{itemDescription: "", itemID:"", completed: false, inEditing: false}
+        item:{itemDescription: "", itemID:"", completed: false}
       }
 
     saveChangeClicked = () => {
-        this.props.saveChangesFunction(this.props.itemID,this.state.itemDescription);
+        this.props.saveChangesFunction(this.props.itemID,this.state.itemDescription, this.props.completed);
     } 
 
     inputBoxChanged = (event) =>{

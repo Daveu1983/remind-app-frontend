@@ -14,6 +14,8 @@ class App extends Component {
     items: [],
     showCompleted: false,
     numberOfLiveItems: 0,
+    inEditing:false,
+    itemInEditing:0
   }  
 
   componentWillMount(){
@@ -21,44 +23,50 @@ class App extends Component {
   }
 
   getItems(){
-    axios.get('https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/tasks')
+    axios.get('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks')
     .then(response => {
      this.setState({items:response.data.tasks})
+     this.getLiveItems();
      })
      .catch(function (error) {
      console.log(error);
      })
+
   }
 
   addItem = (item, userId) =>{
     if ((userId === undefined) || (userId === "0")){
       alert("select  user");
     } else{
-    axios.post('https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
+    axios.post('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
       itemDescription:item,
       completed:false,
       userId:parseInt(userId)
     })
     .then(() => {
       this.getItems();
+      this.getLiveItems();
     })
     .catch(function (error) {
       console.log(error);
     });
-    this.getLiveItems();
+
     }
   }
-  completeItem = (itemToBeCompleted) =>{
-    axios.put('https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
+  completeItem = (itemToBeCompleted, description) =>{
+    axios.put('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
       itemID: itemToBeCompleted,
+      itemDescription:description,
+      completed: true
+
     })
     .then(() => {
       this.getItems();
+      this.getLiveItems();
     })
     .catch(function (error) {
       console.log(error);
     });
-    this.getLiveItems();
   }
   
 
@@ -72,14 +80,14 @@ class App extends Component {
 }
 
   deleteItem = (itemToBeDeleted) =>{
-    axios.delete(`https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/tasks/${itemToBeDeleted}`)
+    axios.delete(`https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks/${itemToBeDeleted}`)
     .then(() => {
       this.getItems();
+      this.getLiveItems();
     })
     .catch(function (error) {
       console.log(error);
     });
-    this.getLiveItems();
   }
   
 
@@ -90,7 +98,7 @@ class App extends Component {
         if(element.completed){
           alert("cannot edit completed item")
         }else{
-          element.inEditing = true;
+          this.setState({inEditing:true, itemInEditing:itemToBeModified});
         }
       }
       return element;
@@ -108,40 +116,22 @@ class App extends Component {
     })
   }
 
-  numberOfLiveItems = () =>{
-    const currentItems = this.state.items.filter((item)=>{
-      return (!item.completed)
-
+  saveChanges = (Id,newDescription, completed) =>{
+    axios.put('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
+      itemID: Id,
+      itemDescription:newDescription,
+      completed: completed
     })
-    this.setState({
-      numberOfLiveItems: currentItems.length
-    }) 
-  }
-
-  saveChanges = (Id,newDescription) =>{
-    const currentItems = this.state.items;
-    currentItems.map((element)=>{
-      if(Id === element.itemID){
-        element.inEditing = false;
-        element.itemDescription = newDescription;
-      }
-      return element;
+    .then(() => {
+      this.getItems();
     })
-    this.setState({
-      items: currentItems
-    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    this.setState({inEditing:false});
   }
   discardChanges = (Id) =>{
-    const currentItems = this.state.items;
-    currentItems.map((element)=>{
-      if(Id === element.itemID){
-        element.inEditing = false;
-      }
-      return element;
-    })
-    this.setState({
-      items: currentItems
-    })
+    this.setState({inEditing:false});
   }
 
   render() { 
@@ -160,13 +150,16 @@ class App extends Component {
             </div>
           </div>
         </div>
-
         {
-            this.state.items.map((element, index)=>{
-              if(element.inEditing){
-                return <EditItem key={index} itemID={element.itemID} 
-                itemDescription={element.itemDescription}
-                saveChangesFunction={this.saveChanges} discardChangesFunction={this.discardChanges}/>
+            this.state.items.map((element, index) =>{
+              if (this.state.inEditing) {
+                if (this.state.itemInEditing === element.itemID){
+                  return <EditItem 
+                  key={index} 
+                  itemID={element.itemID} 
+                  itemDescription={element.itemDescription}
+                  saveChangesFunction={this.saveChanges} discardChangesFunction={this.discardChanges}/>
+                }
               }else{
                 return <ExistingItems key={index} itemID={element.itemID} 
                 showCompleted={this.state.showCompleted} 

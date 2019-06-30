@@ -4,7 +4,7 @@ import axios from 'axios';
 class AddItem extends Component {
 
   state = {
-    item:{itemDescription: "", itemID:"", completed: false, inEditing: false, userId:""},
+    item:{itemDescription: "", itemID:"", completed: false,  userId:""},
     users:[]
   }
   componentWillMount(){
@@ -12,7 +12,7 @@ class AddItem extends Component {
   }
 
   getUsers(){
-    axios.get('https://nz84q7yyv9.execute-api.eu-west-2.amazonaws.com/dev/users')
+    axios.get('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/users')
     // need to refactor back-end app so that users brings back users and not tasks
     .then(response =>{
       this.setState({users:response.data.tasks})
