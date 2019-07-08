@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 
+
 class Header extends Component {
+
+
   render() {
     return (
       <div className="container">
         <header> 
           <div className="row  generalText">
             <div className="col-12">
-            <h1>Remind Me!</h1>
+            <h1>Remind Me!{this.props.test}</h1>
             </div> 
             <div className="col-12">
               <h2>Use this website and never forget anything again</h2>
