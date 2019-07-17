@@ -1,5 +1,5 @@
 const inititialState = {
-    items: [{name:"john", age:12}]
+    items: []
   };
 
 const countItems = (state = inititialState, action) => {
@@ -7,11 +7,9 @@ const countItems = (state = inititialState, action) => {
       case "GET_ITEMS":
         return state.items;
       case "GET_ITEMS_SUCCESS":
-        console.log(action.data)  
         state.items = action.data;
         return state.items
       default:
-        console.log(state.items)  
         return state.items;
     }
   };
