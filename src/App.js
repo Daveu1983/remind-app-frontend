@@ -8,7 +8,6 @@ import SummaryOfItems from "./components/SummaryOfItems";
 import ShowCompletedItemsToggle from "./components/ShowCompletedItemsToggle";
 import EditItem from "./components/EditItem";
 import axios from "axios";
-import { connect } from 'react-redux';
 
 class App extends Component {
   state = {
@@ -141,7 +140,7 @@ class App extends Component {
   render() { 
     return (
       <div className="App">
-        <Header test={this.props.countItems}/>
+        <Header />
         <AddItem addItemFunction={this.addItem}/>
         <div className="container" >
           <div className="row generalText">
@@ -178,21 +177,5 @@ class App extends Component {
     );
   }
 }
-const mapStateToProps = (state) => {
-  return{
-    countItems:state.countItems
-  }
-}
 
-const dispatchStateToProps = (dispatch) =>{
-  return{
-    getItems: () =>
-      dispatch({
-        type:"GET_ITEMS"
-      })
-  }
-}
-
-
-
-export default connect(mapStateToProps, dispatchStateToProps) (App);
+export default App;

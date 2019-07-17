@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+
 
 
 class Header extends Component {
@@ -10,7 +12,7 @@ class Header extends Component {
         <header> 
           <div className="row  generalText">
             <div className="col-12">
-            <h1>Remind Me!{this.props.test}</h1>
+            <h1>Remind Me!{this.props.countItems}</h1>
             </div> 
             <div className="col-12">
               <h2>Use this website and never forget anything again</h2>
@@ -25,4 +27,19 @@ class Header extends Component {
   }
 }
 
-export default Header;
+const mapStateToProps = (state) => {
+  return{
+    countItems:state.countItems
+  }
+}
+
+const dispatchStateToProps = (dispatch) =>{
+  return{
+    getItems: () =>
+      dispatch({
+        type:"GET_ITEMS"
+      })
+  }
+}
+
+export default connect(mapStateToProps, dispatchStateToProps) (Header);
