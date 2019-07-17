@@ -145,7 +145,7 @@ class App extends Component {
         <div className="container" >
           <div className="row generalText">
             <div className="col-8">
-              <SummaryOfItems itemCount={this.state.numberOfLiveItems}/>
+              <SummaryOfItems />
             </div>
             <div className="col-4">
               <ShowCompletedItemsToggle showCompleted={this.state.showCompleted} 

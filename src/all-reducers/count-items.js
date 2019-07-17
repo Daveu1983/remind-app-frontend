@@ -4,8 +4,6 @@ const inititialState = {
 
 const countItems = (state = inititialState, action) => {
     switch (action.type) {
-      case "GET_ITEMS":
-        return state.items;
       case "GET_ITEMS_SUCCESS":
         state.items = action.data;
         return state.items

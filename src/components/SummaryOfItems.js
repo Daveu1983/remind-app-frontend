@@ -15,8 +15,9 @@ class SummaryOfItems extends Component {
 }
 
 const mapStateToProps = (state) => {
+  const filteredItems = filterItems(state.countItems)
   return{
-    itemCount:state.countItems.length
+    itemCount:filteredItems.length
   }
 }
 
@@ -24,6 +25,13 @@ const dispatchStateToProps = (dispatch) =>{
   return{
     setItems: () => dispatch(getItemsAsync())
   }
+}
+
+const filterItems = (items) =>{
+  const filteredItems = items.filter((item)=>{
+    return (!item.completed)
+  })
+  return filteredItems
 }
 
 export default connect(mapStateToProps, dispatchStateToProps) (SummaryOfItems);
