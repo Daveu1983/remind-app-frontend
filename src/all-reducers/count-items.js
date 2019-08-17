@@ -1,15 +1,21 @@
 const inititialState = {
-    items: []
+    items: [], 
+    numberOfItems:0
   };
 
 const countItems = (state = inititialState, action) => {
     switch (action.type) {
       case "GET_ITEMS_SUCCESS":
-        state.items = action.data;
-        return state.items
+        state = {
+          ...state,
+          items:action.data,
+          numberOfItems:action.data.length
+        }
+        return state
       default:
-        return state.items;
+        break;
     }
+    return state;
   };
   
   export default countItems;

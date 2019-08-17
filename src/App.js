@@ -8,33 +8,18 @@ import SummaryOfItems from "./components/SummaryOfItems";
 import ShowCompletedItemsToggle from "./components/ShowCompletedItemsToggle";
 import EditItem from "./components/EditItem";
 import axios from "axios";
+import { connect } from 'react-redux';
+import { getItemsAsync } from "./all-actions/count-items";
 
 class App extends Component {
   state = {
-    items: [],
     showCompleted: false,
-    numberOfLiveItems: 0,
     inEditing:false,
     itemInEditing:0
   }  
 
-
-
-
   componentWillMount(){
-    this.getItems();
-  }
-
-  getItems(){
-    axios.get('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks')
-    .then(response => {
-     this.setState({items:response.data.tasks})
-     this.getLiveItems();
-     })
-     .catch(function (error) {
-     console.log(error);
-     })
-
+    this.props.setItems()
   }
 
   addItem = (item, userId) =>{
@@ -47,8 +32,7 @@ class App extends Component {
       userId:parseInt(userId)
     })
     .then(() => {
-      this.getItems();
-      this.getLiveItems();
+      this.props.setItems();
     })
     .catch(function (error) {
       console.log(error);
@@ -64,29 +48,17 @@ class App extends Component {
 
     })
     .then(() => {
-      this.getItems();
-      this.getLiveItems();
+      this.props.setItems();
     })
     .catch(function (error) {
       console.log(error);
     });
   }
-  
-
-  getLiveItems = () => {
-  const filteredItems = this.state.items.filter((item)=>{
-    return (!item.completed)
-  })
-  this.setState({
-    numberOfLiveItems: filteredItems.length
-  }) 
-}
 
   deleteItem = (itemToBeDeleted) =>{
     axios.delete(`https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks/${itemToBeDeleted}`)
     .then(() => {
-      this.getItems();
-      this.getLiveItems();
+      this.props.setItems();
     })
     .catch(function (error) {
       console.log(error);
@@ -126,7 +98,7 @@ class App extends Component {
       completed: completed
     })
     .then(() => {
-      this.getItems();
+      this.setItems();
     })
     .catch(function (error) {
       console.log(error);
@@ -145,7 +117,7 @@ class App extends Component {
         <div className="container" >
           <div className="row generalText">
             <div className="col-8">
-              <SummaryOfItems />
+              <SummaryOfItems numberOfLiveItems={this.props.numberOfItems} />
             </div>
             <div className="col-4">
               <ShowCompletedItemsToggle showCompleted={this.state.showCompleted} 
@@ -153,8 +125,10 @@ class App extends Component {
             </div>
           </div>
         </div>
+        {console.log(this.props.countItems)}
         {
-            this.state.items.map((element, index) =>{
+            // eslint-disable-next-line array-callback-return
+            this.props.countItems.map((element, index) =>{
               if (this.state.inEditing) {
                 if (this.state.itemInEditing === element.itemID){
                   return <EditItem 
@@ -178,4 +152,17 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return{
+    countItems:state.countItems.items,
+    numberOfItems:state.countItems.numberOfItems
+  }
+}
+
+const dispatchStateToProps = (dispatch) =>{
+  return{
+    setItems: () => dispatch(getItemsAsync())
+  }
+}
+
+export default connect(mapStateToProps, dispatchStateToProps) (App);

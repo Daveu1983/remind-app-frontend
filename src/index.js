@@ -10,7 +10,7 @@ import thunk from "redux-thunk"
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(
+    export const store = createStore(
     allReducers, 
     composeEnhancer(applyMiddleware(thunk)), 
     );
@@ -21,3 +21,4 @@ ReactDOM.render(<Provider store={store}><App /></Provider>,document.getElementBy
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
