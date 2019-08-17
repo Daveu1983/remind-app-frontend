@@ -10,6 +10,7 @@ import EditItem from "./components/EditItem";
 import axios from "axios";
 import { connect } from 'react-redux';
 import { getItemsAsync } from "./all-actions/count-items";
+import { getNumberOfLiveItems } from "./all-reducers/count-items";
 
 class App extends Component {
   state = {
@@ -19,6 +20,10 @@ class App extends Component {
   }  
 
   componentWillMount(){
+    this.getItems()
+  }
+
+  getItems = () =>{
     this.props.setItems()
   }
 
@@ -117,7 +122,7 @@ class App extends Component {
         <div className="container" >
           <div className="row generalText">
             <div className="col-8">
-              <SummaryOfItems numberOfLiveItems={this.props.numberOfItems} />
+              <SummaryOfItems numberOfLiveItems={this.props.numberOfLiveItems} />
             </div>
             <div className="col-4">
               <ShowCompletedItemsToggle showCompleted={this.state.showCompleted} 
@@ -125,7 +130,6 @@ class App extends Component {
             </div>
           </div>
         </div>
-        {console.log(this.props.countItems)}
         {
             // eslint-disable-next-line array-callback-return
             this.props.countItems.map((element, index) =>{
@@ -155,7 +159,7 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return{
     countItems:state.countItems.items,
-    numberOfItems:state.countItems.numberOfItems
+    numberOfLiveItems:getNumberOfLiveItems(state.countItems)
   }
 }
 

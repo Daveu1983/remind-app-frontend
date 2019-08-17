@@ -1,6 +1,5 @@
 const inititialState = {
     items: [], 
-    numberOfItems:0
   };
 
 const countItems = (state = inititialState, action) => {
@@ -8,8 +7,7 @@ const countItems = (state = inititialState, action) => {
       case "GET_ITEMS_SUCCESS":
         state = {
           ...state,
-          items:action.data,
-          numberOfItems:action.data.length
+          items:action.data
         }
         return state
       default:
@@ -17,5 +15,16 @@ const countItems = (state = inititialState, action) => {
     }
     return state;
   };
+
+  export const getNumberOfLiveItems = (state) => {
+    if(state.items.length > 0){
+      const filteredItems = state.items.filter((element) =>{
+        if(!(element.completed)){
+          return element;
+        }
+      })
+      return filteredItems.length
+    }
+  }
   
   export default countItems;
