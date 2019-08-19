@@ -20,10 +20,6 @@ class App extends Component {
   }  
 
   componentWillMount(){
-    this.getItems()
-  }
-
-  getItems = () =>{
     this.props.setItems()
   }
 

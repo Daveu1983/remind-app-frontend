@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { saveDescription } from "../all-actions/add-item";
 
 class AddItem extends Component {
 
   state = {
-    item:{itemDescription: "", itemID:"", completed: false,  userId:""},
     users:[]
   }
   componentWillMount(){
@@ -13,7 +14,6 @@ class AddItem extends Component {
 
   getUsers(){
     axios.get('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/users')
-    // need to refactor back-end app so that users brings back users and not tasks
     .then(response =>{
       this.setState({users:response.data.tasks})
     })
@@ -24,11 +24,10 @@ class AddItem extends Component {
 
   addItemClicked = () => {
     this.props.addItemFunction(this.state.itemDescription, this.state.username);
-
   } 
 
   inputBoxChanged = (event) =>{
-    this.setState({itemDescription: event.target.value})
+    this.props.saveDescriptionChanges(event.target.value)
   }
 
   saveUser = (event) =>{
@@ -67,4 +66,16 @@ class AddItem extends Component {
   }
 }
 
-export default AddItem;
+const mapStateToProps = (state) => {
+  return{
+    description:state.description,
+  }
+}
+
+const dispatchStateToProps = (dispatch) =>{
+  return{
+    saveDescriptionChanges: (description) => dispatch(saveDescription(description))
+  }
+}
+
+export default connect(mapStateToProps, dispatchStateToProps) (AddItem);
