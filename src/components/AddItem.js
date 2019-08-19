@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { saveDescription } from "../all-actions/add-item";
+import { addItemAsync } from "../all-actions/add-item";
 
 class AddItem extends Component {
 
   state = {
+    username:"",
     users:[]
   }
   componentWillMount(){
@@ -23,8 +25,12 @@ class AddItem extends Component {
   }
 
   addItemClicked = () => {
-    this.props.addItemFunction(this.state.itemDescription, this.state.username);
-  } 
+    if ((this.state.username === undefined) || (this.state.username === "")){
+      alert("select  user");
+    } else{
+    this.props.addItemFunction(this.props.description, this.state.username);
+  }
+} 
 
   inputBoxChanged = (event) =>{
     this.props.saveDescriptionChanges(event.target.value)
@@ -68,14 +74,16 @@ class AddItem extends Component {
 
 const mapStateToProps = (state) => {
   return{
-    description:state.description,
+    description:state.addItem.description,
   }
 }
 
 const dispatchStateToProps = (dispatch) =>{
   return{
-    saveDescriptionChanges: (description) => dispatch(saveDescription(description))
+    saveDescriptionChanges: (description) => {dispatch(saveDescription(description))},
+    addItemFunction:(description, username) =>{dispatch(addItemAsync(description,username))}
   }
+
 }
 
 export default connect(mapStateToProps, dispatchStateToProps) (AddItem);

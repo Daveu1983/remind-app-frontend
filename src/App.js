@@ -23,24 +23,6 @@ class App extends Component {
     this.props.setItems()
   }
 
-  addItem = (item, userId) =>{
-    if ((userId === undefined) || (userId === "0")){
-      alert("select  user");
-    } else{
-    axios.post('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
-      itemDescription:item,
-      completed:false,
-      userId:parseInt(userId)
-    })
-    .then(() => {
-      this.props.setItems();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
-    }
-  }
   completeItem = (itemToBeCompleted, description) =>{
     axios.put('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
       itemID: itemToBeCompleted,
@@ -114,7 +96,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <AddItem addItemFunction={this.addItem}/>
+        <AddItem />
         <div className="container" >
           <div className="row generalText">
             <div className="col-8">

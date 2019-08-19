@@ -2,7 +2,7 @@ const inititialState = {
     description: "", 
   };
 
-const addItem = (state = inititialState, action) => {
+const saveDescription = (state = inititialState, action) => {
     switch (action.type) {
       case "SAVE_DESCRIPTION":
         state = {
@@ -16,4 +16,4 @@ const addItem = (state = inititialState, action) => {
     return state;
   };
 
-  export default addItem;
+  export default saveDescription;
