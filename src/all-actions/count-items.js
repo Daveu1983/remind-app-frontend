@@ -20,6 +20,19 @@ const getItemsSuccess = fred => {
       payload:showComplete
     }
   }
+
+  export const editItem = itemToBeModified =>{
+    return {
+      type:"MODIFY_ITEM",
+      payload:itemToBeModified
+    }
+  }
+  
+  export const getOutOfEditMode = () =>{
+    return{
+      type:"OUT_OF_EDIT"
+    }
+  }
   
   export const getItemsAsync = () => {
     return dispatch => {

@@ -1,6 +1,8 @@
 const inititialState = {
     items: [], 
-    showCompleted:false
+    showCompleted:false,
+    itemInEditing: 0,
+    inEditing:false
   };
 
 const countItems = (state = inititialState, action) => {
@@ -17,6 +19,20 @@ const countItems = (state = inititialState, action) => {
           showCompleted:!action.payload
         }
         return state
+      case "MODIFY_ITEM":
+        state = {
+          ...state,
+          itemInEditing:action.payload,
+          inEditing:true
+        }
+        return state;  
+      case "OUT_OF_EDIT":
+          state = {
+            ...state,
+            itemInEditing:0,
+            inEditing:false
+          }
+          return state; 
       default:
         break;
     }

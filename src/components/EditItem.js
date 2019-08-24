@@ -1,16 +1,15 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import {saveDescriptionChange} from '../all-actions/edit-item';
 
 class EditItem extends Component {
-    state = {
-        item:{itemDescription: "", itemID:"", completed: false}
-      }
 
     saveChangeClicked = () => {
-        this.props.saveChangesFunction(this.props.itemID,this.state.itemDescription, this.props.completed);
+        this.props.saveChangesFunction(this.props.itemID,this.props.newDescription, this.props.completed);
     } 
 
     inputBoxChanged = (event) =>{
-        this.setState({itemDescription: event.target.value})
+        this.props.saveDescriptionChanges(event.target.value)
     }
 
     discardChangeClicked = () =>{
@@ -46,5 +45,16 @@ class EditItem extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+    return{
+      newDescription:state.editItem.newDescription,
+    }
+  }
+  
+  const dispatchStateToProps = (dispatch) =>{
+    return{
+      saveDescriptionChanges: (description) => {dispatch(saveDescriptionChange(description))},
+    }
+}
 
-export default EditItem;
+export default connect(mapStateToProps, dispatchStateToProps) (EditItem);

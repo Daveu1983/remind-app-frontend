@@ -10,11 +10,11 @@ class ExistingItems extends Component {
   }
 
   completeItemClicked = () => {
-    this.props.completeItem(this.props.itemID, this.props.itemDescription);
+    this.props.completeItem(this.props.itemID);
   }
 
   modifyItemClicked = () => {
-    this.props.modifyItemFunction(this.props.itemID, this.props.itemDescription);
+    this.props.modifyItemFunction(this.props.itemID);
   }
 
   render() {

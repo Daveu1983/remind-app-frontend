@@ -7,56 +7,40 @@ import ExistingItems from "./components/ExistingItems";
 import SummaryOfItems from "./components/SummaryOfItems";
 import ShowCompletedItemsToggle from "./components/ShowCompletedItemsToggle";
 import EditItem from "./components/EditItem";
-import axios from "axios";
 import { connect } from 'react-redux';
 import { getItemsAsync } from "./all-actions/count-items";
+import { saveItemChangeAsync } from "./all-actions/edit-item";
 import { toggleCompletedFunction } from "./all-actions/count-items";
+import { editItem } from "./all-actions/count-items";
+import { getOutOfEditMode } from "./all-actions/count-items";
 import { getNumberOfLiveItems } from "./all-reducers/count-items";
 
 class App extends Component {
-  state = {
-    inEditing:false,
-    itemInEditing:0
-  }  
 
   componentWillMount(){
     this.props.setItems()
   }
 
   modifyItem = (itemToBeModified) => {
-    const currentItems = this.state.items;
-    currentItems.map((element)=>{
+    const currentItems = this.props.countItems;
+    currentItems.forEach((element)=>{
       if(itemToBeModified === element.itemID){
         if(element.completed){
           alert("cannot edit completed item")
         }else{
-          this.setState({inEditing:true, itemInEditing:itemToBeModified});
+          this.props.editItemFunction(itemToBeModified)
         }
       }
-      return element;
-    })
-    this.setState({
-      items: currentItems
     })
   }
-
 
   saveChanges = (Id,newDescription, completed) =>{
-    axios.put('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
-      itemID: Id,
-      itemDescription:newDescription,
-      completed: completed
-    })
-    .then(() => {
-      this.setItems();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    this.setState({inEditing:false});
+    console.log(Id,newDescription,completed)
+    this.props.saveItemChanges(Id,newDescription, completed)
   }
-  discardChanges = (Id) =>{
-    this.setState({inEditing:false});
+
+  discardChanges = () =>{
+    this.props.discardChange()
   }
 
   toggleCompleted = () =>{
@@ -82,11 +66,12 @@ class App extends Component {
         {
             // eslint-disable-next-line array-callback-return
             this.props.countItems.map((element, index) =>{
-              if (this.state.inEditing) {
-                if (this.state.itemInEditing === element.itemID){
+              if (this.props.inEditing) {
+                if (this.props.itemInEditing === element.itemID){
                   return <EditItem 
                   key={index} 
                   itemID={element.itemID} 
+                  completed={element.completed}
                   itemDescription={element.itemDescription}
                   saveChangesFunction={this.saveChanges} discardChangesFunction={this.discardChanges}/>
                 }
@@ -108,14 +93,19 @@ const mapStateToProps = (state) => {
   return{
     countItems:state.countItems.items,
     numberOfLiveItems:getNumberOfLiveItems(state.countItems),
-    showCompleted:state.countItems.showCompleted
+    showCompleted:state.countItems.showCompleted,
+    inEditing:state.countItems.inEditing,
+    itemInEditing:state.countItems.itemInEditing
   }
 }
 
 const dispatchStateToProps = (dispatch) =>{
   return{
     setItems: () => dispatch(getItemsAsync()),
-    toggleCompletedItems: (showComplete) => dispatch(toggleCompletedFunction(showComplete))
+    toggleCompletedItems: (showComplete) => dispatch(toggleCompletedFunction(showComplete)),
+    editItemFunction: (itemToBeModified) =>dispatch(editItem(itemToBeModified)),
+    discardChange: () => dispatch(getOutOfEditMode()),
+    saveItemChanges:(Id,newDescription, completed) =>dispatch(saveItemChangeAsync(Id,newDescription, completed))
   }
 }
 
