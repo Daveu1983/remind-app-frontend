@@ -8,6 +8,12 @@ export const saveDescriptionChange = description =>{
     }
 }
 
+export const clearEditDescription = () =>{
+    return{
+        type:"CLEAR_DESCRIPTION",
+    }
+}
+
 export const saveItemChangeAsync = (Id,newDescription, completed) =>{
     return dispatch =>{
         axios.put('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
