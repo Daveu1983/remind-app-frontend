@@ -23,32 +23,6 @@ class App extends Component {
     this.props.setItems()
   }
 
-  completeItem = (itemToBeCompleted, description) =>{
-    axios.put('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
-      itemID: itemToBeCompleted,
-      itemDescription:description,
-      completed: true
-
-    })
-    .then(() => {
-      this.props.setItems();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-
-  deleteItem = (itemToBeDeleted) =>{
-    axios.delete(`https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks/${itemToBeDeleted}`)
-    .then(() => {
-      this.props.setItems();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-  
-
   modifyItem = (itemToBeModified) => {
     const currentItems = this.state.items;
     currentItems.map((element)=>{
@@ -123,7 +97,6 @@ class App extends Component {
                 return <ExistingItems key={index} itemID={element.itemID} 
                 showCompleted={this.state.showCompleted} 
                 itemCompleted={element.completed} itemDescription={element.itemDescription} 
-                completeItemFunction={this.completeItem} deleteItemFunction={this.deleteItem}
                 modifyItemFunction={this.modifyItem}/>
               }
             })      

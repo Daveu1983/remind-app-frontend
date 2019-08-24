@@ -1,13 +1,16 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import {deleteItemAsync} from '../all-actions/delete-item';
+import {completeItemAsync} from '../all-actions/complete-item';
 
 class ExistingItems extends Component {
 
   deleteItemClicked = () => {
-    this.props.deleteItemFunction(this.props.itemID);
+    this.props.deleteItem(this.props.itemID);
   }
 
   completeItemClicked = () => {
-    this.props.completeItemFunction(this.props.itemID, this.props.itemDescription);
+    this.props.completeItem(this.props.itemID, this.props.itemDescription);
   }
 
   modifyItemClicked = () => {
@@ -32,4 +35,16 @@ class ExistingItems extends Component {
   }
 }
 
-export default ExistingItems;
+const mapStateToProps = (state) => {
+  return{
+
+  }
+}
+
+const dispatchStateToProps = (dispatch) =>{
+  return{
+    deleteItem: (itemID) => dispatch(deleteItemAsync(itemID)),
+    completeItem:(itemID, itemDescription) => dispatch(completeItemAsync(itemID, itemDescription))
+  }
+}
+export default connect(mapStateToProps, dispatchStateToProps) (ExistingItems);
