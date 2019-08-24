@@ -17,6 +17,12 @@ const countUsers = (state = inititialState, action) => {
             username:action.payload
         }
         return state    
+      case "CLEAR_USERNAME":
+          state = {
+              ...state,
+              username:""
+          }
+          return state    
       default:
         break;
     }

@@ -35,7 +35,6 @@ class App extends Component {
   }
 
   saveChanges = (Id,newDescription, completed) =>{
-    console.log(Id,newDescription,completed)
     this.props.saveItemChanges(Id,newDescription, completed)
   }
 

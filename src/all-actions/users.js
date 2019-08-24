@@ -21,6 +21,12 @@ export const setUserName = username =>{
     }
 }
 
+export const clearUsername = () =>{
+    return{
+    type:"CLEAR_USERNAME"
+    }
+}
+
 export const getUsersAsync = () => {
     return dispatch => {
         axios.get("https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/users")

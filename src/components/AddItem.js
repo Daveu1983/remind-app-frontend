@@ -2,8 +2,10 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { saveDescription } from "../all-actions/add-item";
 import { addItemAsync } from "../all-actions/add-item";
+import { clearDescription } from "../all-actions/add-item";
 import { getUsersAsync } from '../all-actions/users';
 import { setUserName } from '../all-actions/users';
+import { clearUsername } from '../all-actions/users';
 
 class AddItem extends Component {
 
@@ -16,6 +18,7 @@ class AddItem extends Component {
       alert("select  user");
     } else{
     this.props.addItemFunction(this.props.description, this.props.username);
+    this.props.clearUsernameAndDescription()
   }
 } 
 
@@ -72,7 +75,11 @@ const dispatchStateToProps = (dispatch) =>{
     saveDescriptionChanges: (description) => {dispatch(saveDescription(description))},
     addItemFunction:(description, username) =>{dispatch(addItemAsync(description,username))},
     getUsers:()=>{dispatch(getUsersAsync())},
-    setUsername:(userName)=>dispatch(setUserName(userName))
+    setUsername:(userName)=>dispatch(setUserName(userName)),
+    clearUsernameAndDescription:()=>{
+      dispatch(clearUsername())
+      dispatch(clearDescription())
+    }
   }
 
 }

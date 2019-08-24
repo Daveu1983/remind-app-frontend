@@ -10,6 +10,12 @@ const saveDescription = (state = inititialState, action) => {
           description:action.payload
         }
         return state
+      case "CLEAR_DESCRIPTION":
+          state = {
+            ...state,
+            description:""
+          }
+          return state
       default:
         break;
     }

@@ -8,6 +8,12 @@ export const saveDescription = description =>{
     }
 }
 
+export const clearDescription = () =>{
+    return{
+        type:"CLEAR_DESCRIPTION"
+    }
+}
+
 export const addItemAsync = (description, username) =>{
     return dispatch => {
         axios.post('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
