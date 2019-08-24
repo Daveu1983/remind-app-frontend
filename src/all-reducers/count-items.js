@@ -1,5 +1,6 @@
 const inititialState = {
     items: [], 
+    showCompleted:false
   };
 
 const countItems = (state = inititialState, action) => {
@@ -7,7 +8,13 @@ const countItems = (state = inititialState, action) => {
       case "GET_ITEMS_SUCCESS":
         state = {
           ...state,
-          items:action.data
+          items:action.payload
+        }
+        return state
+      case "TOGGLE_COMPLETED":
+        state = {
+          ...state,
+          showCompleted:!action.payload
         }
         return state
       default:

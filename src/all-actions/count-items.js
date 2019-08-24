@@ -3,7 +3,7 @@ import axios from "axios";
 const getItemsSuccess = fred => {
     return {
       type: "GET_ITEMS_SUCCESS",
-      data: fred
+      payload: fred
     };
   };
   
@@ -13,6 +13,13 @@ const getItemsSuccess = fred => {
       error: err
     };
   };
+
+  export const toggleCompletedFunction = showComplete =>{
+    return {
+      type:"TOGGLE_COMPLETED",
+      payload:showComplete
+    }
+  }
   
   export const getItemsAsync = () => {
     return dispatch => {

@@ -10,11 +10,11 @@ import EditItem from "./components/EditItem";
 import axios from "axios";
 import { connect } from 'react-redux';
 import { getItemsAsync } from "./all-actions/count-items";
+import { toggleCompletedFunction } from "./all-actions/count-items";
 import { getNumberOfLiveItems } from "./all-reducers/count-items";
 
 class App extends Component {
   state = {
-    showCompleted: false,
     inEditing:false,
     itemInEditing:0
   }  
@@ -40,13 +40,6 @@ class App extends Component {
     })
   }
 
-  showCompleted = () =>{
-    let currentShowCompletedState = this.state.showCompleted
-    currentShowCompletedState = !currentShowCompletedState
-    this.setState({
-      showCompleted: currentShowCompletedState
-    })
-  }
 
   saveChanges = (Id,newDescription, completed) =>{
     axios.put('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
@@ -66,6 +59,10 @@ class App extends Component {
     this.setState({inEditing:false});
   }
 
+  toggleCompleted = () =>{
+    this.props.toggleCompletedItems(this.props.showCompleted)
+  }
+
   render() { 
     return (
       <div className="App">
@@ -77,8 +74,8 @@ class App extends Component {
               <SummaryOfItems numberOfLiveItems={this.props.numberOfLiveItems} />
             </div>
             <div className="col-4">
-              <ShowCompletedItemsToggle showCompleted={this.state.showCompleted} 
-              showCompletedFunction={this.showCompleted} />
+              <ShowCompletedItemsToggle showCompleted={this.props.showCompleted} 
+              showCompletedFunction={this.toggleCompleted} />
             </div>
           </div>
         </div>
@@ -95,7 +92,7 @@ class App extends Component {
                 }
               }else{
                 return <ExistingItems key={index} itemID={element.itemID} 
-                showCompleted={this.state.showCompleted} 
+                showCompleted={this.props.showCompleted} 
                 itemCompleted={element.completed} itemDescription={element.itemDescription} 
                 modifyItemFunction={this.modifyItem}/>
               }
@@ -110,13 +107,15 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return{
     countItems:state.countItems.items,
-    numberOfLiveItems:getNumberOfLiveItems(state.countItems)
+    numberOfLiveItems:getNumberOfLiveItems(state.countItems),
+    showCompleted:state.countItems.showCompleted
   }
 }
 
 const dispatchStateToProps = (dispatch) =>{
   return{
-    setItems: () => dispatch(getItemsAsync())
+    setItems: () => dispatch(getItemsAsync()),
+    toggleCompletedItems: (showComplete) => dispatch(toggleCompletedFunction(showComplete))
   }
 }
 
