@@ -8,6 +8,8 @@ Functionality includes:-
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Dockerfile added to build image of the app.
+
 ## Available Scripts
 
 In the project directory, you can run:
