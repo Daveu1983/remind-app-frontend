@@ -1,38 +1,33 @@
 import React, { Component } from "react";
-import axios from 'axios';
+import { connect } from 'react-redux';
+import { saveDescription } from "../all-actions/add-item";
+import { addItemAsync } from "../all-actions/add-item";
+import { clearDescription } from "../all-actions/add-item";
+import { getUsersAsync } from '../all-actions/users';
+import { setUserName } from '../all-actions/users';
+import { clearUsername } from '../all-actions/users';
 
 class AddItem extends Component {
 
-  state = {
-    item:{itemDescription: "", itemID:"", completed: false,  userId:""},
-    users:[]
-  }
   componentWillMount(){
-    this.getUsers()
-  }
-
-  getUsers(){
-    axios.get('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/users')
-    // need to refactor back-end app so that users brings back users and not tasks
-    .then(response =>{
-      this.setState({users:response.data.tasks})
-    })
-  .catch(function (error) {
-  console.log(error);
-    })
+    this.props.getUsers()
   }
 
   addItemClicked = () => {
-    this.props.addItemFunction(this.state.itemDescription, this.state.username);
-
-  } 
+    if ((this.props.username === undefined) || (this.props.username === "")){
+      alert("select  user");
+    } else{
+    this.props.addItemFunction(this.props.description, this.props.username);
+    this.props.clearUsernameAndDescription()
+  }
+} 
 
   inputBoxChanged = (event) =>{
-    this.setState({itemDescription: event.target.value})
+    this.props.saveDescriptionChanges(event.target.value)
   }
 
   saveUser = (event) =>{
-    this.setState({username:event.target.value})
+    this.props.setUsername(event.target.value)
   }
 
   render() {
@@ -48,7 +43,7 @@ class AddItem extends Component {
                     <select onChange={this.saveUser}>
                       <option value="0">Select a user below</option>
                      { 
-                        this.state.users.map((element, index)=>{
+                        this.props.users.map((element, index)=>{
 
                           return <option key={index} value={element.userId}>{element.username} </option>
                         })
@@ -67,4 +62,26 @@ class AddItem extends Component {
   }
 }
 
-export default AddItem;
+const mapStateToProps = (state) => {
+  return{
+    description:state.addItem.description,
+    users:state.countUsers.users,
+    username:state.countUsers.username
+  }
+}
+
+const dispatchStateToProps = (dispatch) =>{
+  return{
+    saveDescriptionChanges: (description) => {dispatch(saveDescription(description))},
+    addItemFunction:(description, username) =>{dispatch(addItemAsync(description,username))},
+    getUsers:()=>{dispatch(getUsersAsync())},
+    setUsername:(userName)=>dispatch(setUserName(userName)),
+    clearUsernameAndDescription:()=>{
+      dispatch(clearUsername())
+      dispatch(clearDescription())
+    }
+  }
+
+}
+
+export default connect(mapStateToProps, dispatchStateToProps) (AddItem);

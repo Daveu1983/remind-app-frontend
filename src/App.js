@@ -7,164 +7,77 @@ import ExistingItems from "./components/ExistingItems";
 import SummaryOfItems from "./components/SummaryOfItems";
 import ShowCompletedItemsToggle from "./components/ShowCompletedItemsToggle";
 import EditItem from "./components/EditItem";
-import axios from "axios";
+import { connect } from 'react-redux';
+import { getItemsAsync } from "./all-actions/count-items";
+import { saveItemChangeAsync } from "./all-actions/edit-item";
+import { toggleCompletedFunction } from "./all-actions/count-items";
+import { editItem } from "./all-actions/count-items";
+import { getOutOfEditMode } from "./all-actions/count-items";
+import { getNumberOfLiveItems } from "./all-reducers/count-items";
 
 class App extends Component {
-  state = {
-    items: [],
-    showCompleted: false,
-    numberOfLiveItems: 0,
-    inEditing:false,
-    itemInEditing:0
-  }  
 
   componentWillMount(){
-    this.getItems();
+    this.props.setItems()
   }
-
-  getItems(){
-    axios.get('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks')
-    .then(response => {
-     this.setState({items:response.data.tasks})
-     this.getLiveItems();
-     })
-     .catch(function (error) {
-     console.log(error);
-     })
-
-  }
-
-  addItem = (item, userId) =>{
-    if ((userId === undefined) || (userId === "0")){
-      alert("select  user");
-    } else{
-    axios.post('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
-      itemDescription:item,
-      completed:false,
-      userId:parseInt(userId)
-    })
-    .then(() => {
-      this.getItems();
-      this.getLiveItems();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
-    }
-  }
-  completeItem = (itemToBeCompleted, description) =>{
-    axios.put('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
-      itemID: itemToBeCompleted,
-      itemDescription:description,
-      completed: true
-
-    })
-    .then(() => {
-      this.getItems();
-      this.getLiveItems();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-  
-
-  getLiveItems = () => {
-  const filteredItems = this.state.items.filter((item)=>{
-    return (!item.completed)
-  })
-  this.setState({
-    numberOfLiveItems: filteredItems.length
-  }) 
-}
-
-  deleteItem = (itemToBeDeleted) =>{
-    axios.delete(`https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks/${itemToBeDeleted}`)
-    .then(() => {
-      this.getItems();
-      this.getLiveItems();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-  
 
   modifyItem = (itemToBeModified) => {
-    const currentItems = this.state.items;
-    currentItems.map((element)=>{
+    const currentItems = this.props.countItems;
+    currentItems.forEach((element)=>{
       if(itemToBeModified === element.itemID){
         if(element.completed){
           alert("cannot edit completed item")
         }else{
-          this.setState({inEditing:true, itemInEditing:itemToBeModified});
+          this.props.editItemFunction(itemToBeModified)
         }
       }
-      return element;
-    })
-    this.setState({
-      items: currentItems
-    })
-  }
-
-  showCompleted = () =>{
-    let currentShowCompletedState = this.state.showCompleted
-    currentShowCompletedState = !currentShowCompletedState
-    this.setState({
-      showCompleted: currentShowCompletedState
     })
   }
 
   saveChanges = (Id,newDescription, completed) =>{
-    axios.put('https://sr4vx99h08.execute-api.eu-west-2.amazonaws.com/dev/tasks',{
-      itemID: Id,
-      itemDescription:newDescription,
-      completed: completed
-    })
-    .then(() => {
-      this.getItems();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    this.setState({inEditing:false});
+    this.props.saveItemChanges(Id,newDescription, completed)
   }
-  discardChanges = (Id) =>{
-    this.setState({inEditing:false});
+
+  discardChanges = () =>{
+    this.props.discardChange()
+  }
+
+  toggleCompleted = () =>{
+    this.props.toggleCompletedItems(this.props.showCompleted)
   }
 
   render() { 
     return (
       <div className="App">
         <Header />
-        <AddItem addItemFunction={this.addItem}/>
+        <AddItem />
         <div className="container" >
           <div className="row generalText">
             <div className="col-8">
-              <SummaryOfItems itemCount={this.state.numberOfLiveItems}/>
+              <SummaryOfItems numberOfLiveItems={this.props.numberOfLiveItems} />
             </div>
             <div className="col-4">
-              <ShowCompletedItemsToggle showCompleted={this.state.showCompleted} 
-              showCompletedFunction={this.showCompleted} />
+              <ShowCompletedItemsToggle showCompleted={this.props.showCompleted} 
+              showCompletedFunction={this.toggleCompleted} />
             </div>
           </div>
         </div>
         {
-            this.state.items.map((element, index) =>{
-              if (this.state.inEditing) {
-                if (this.state.itemInEditing === element.itemID){
+            // eslint-disable-next-line array-callback-return
+            this.props.countItems.map((element, index) =>{
+              if (this.props.inEditing) {
+                if (this.props.itemInEditing === element.itemID){
                   return <EditItem 
                   key={index} 
                   itemID={element.itemID} 
+                  completed={element.completed}
                   itemDescription={element.itemDescription}
                   saveChangesFunction={this.saveChanges} discardChangesFunction={this.discardChanges}/>
                 }
               }else{
                 return <ExistingItems key={index} itemID={element.itemID} 
-                showCompleted={this.state.showCompleted} 
+                showCompleted={this.props.showCompleted} 
                 itemCompleted={element.completed} itemDescription={element.itemDescription} 
-                completeItemFunction={this.completeItem} deleteItemFunction={this.deleteItem}
                 modifyItemFunction={this.modifyItem}/>
               }
             })      
@@ -175,4 +88,24 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return{
+    countItems:state.countItems.items,
+    numberOfLiveItems:getNumberOfLiveItems(state.countItems),
+    showCompleted:state.countItems.showCompleted,
+    inEditing:state.countItems.inEditing,
+    itemInEditing:state.countItems.itemInEditing
+  }
+}
+
+const dispatchStateToProps = (dispatch) =>{
+  return{
+    setItems: () => dispatch(getItemsAsync()),
+    toggleCompletedItems: (showComplete) => dispatch(toggleCompletedFunction(showComplete)),
+    editItemFunction: (itemToBeModified) =>dispatch(editItem(itemToBeModified)),
+    discardChange: () => dispatch(getOutOfEditMode()),
+    saveItemChanges:(Id,newDescription, completed) =>dispatch(saveItemChangeAsync(Id,newDescription, completed))
+  }
+}
+
+export default connect(mapStateToProps, dispatchStateToProps) (App);

@@ -1,20 +1,26 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import {saveDescriptionChange} from '../all-actions/edit-item';
+import {clearEditDescription} from '../all-actions/edit-item';
 
 class EditItem extends Component {
-    state = {
-        item:{itemDescription: "", itemID:"", completed: false}
-      }
 
     saveChangeClicked = () => {
-        this.props.saveChangesFunction(this.props.itemID,this.state.itemDescription, this.props.completed);
+      if(this.props.newDescription === ""){
+        alert("description either not changed or blank");
+      }else{
+        this.props.saveChangesFunction(this.props.itemID,this.props.newDescription, this.props.completed);
+        this.props.clearNewDescription()
+      }
     } 
 
     inputBoxChanged = (event) =>{
-        this.setState({itemDescription: event.target.value})
+        this.props.saveDescriptionChanges(event.target.value)
     }
 
     discardChangeClicked = () =>{
         this.props.discardChangesFunction(this.props.itemID)
+        this.props.clearNewDescription()
     }
 
 
@@ -46,5 +52,17 @@ class EditItem extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+    return{
+      newDescription:state.editItem.newDescription,
+    }
+  }
+  
+  const dispatchStateToProps = (dispatch) =>{
+    return{
+      saveDescriptionChanges: (description) => {dispatch(saveDescriptionChange(description))},
+      clearNewDescription: () => (dispatch(clearEditDescription()))
+    }
+}
 
-export default EditItem;
+export default connect(mapStateToProps, dispatchStateToProps) (EditItem);

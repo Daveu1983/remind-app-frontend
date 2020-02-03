@@ -8,8 +8,8 @@ class Header extends Component {
           <div className="row  generalText">
             <div className="col-12">
             <h1>Remind Me!</h1>
-            </div> 
-            <div className="col-12">
+            </div>
+            <div className="col-12"> 
               <h2>Use this website and never forget anything again</h2>
             </div>
             <div className="col-12">
@@ -21,5 +21,6 @@ class Header extends Component {
     );
   }
 }
+
 
 export default Header;
